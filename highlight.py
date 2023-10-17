@@ -64,8 +64,8 @@ else:
     log.error(f"File not found: {FILENAME_AUTHORS}!")
     log.error(f"Please create the file within the working directory.")
     log.error(f"For format is one author per line. Example:")
-    log.error("Rainer Beck")
-    log.error("D. Sokoloff")
+    log.error("Beck, Rainer")
+    log.error("Sokoloff, D.")
     log.error("Exiting ...")
     exit()
 
@@ -136,16 +136,20 @@ def highlight_title(pdf):
         log.warning("No title found in pdf metadata!")
 
 
-def get_author_variation(authors):
+def get_authors_strings(authors):
     authors_plus = []
     for author in authors:
-        a_list = author.strip().split(" ")
+        tmp = author.split(",")
+        lastname = tmp[0].strip()
+        firstname = tmp[1].strip()
+        authors_plus.append(firstname + " " + lastname)
+        a_list = firstname.strip().split(" ")
         s = ""
-        for a in a_list[0:-1]:
+        for a in a_list:
             s += a[0] + ". "
-        s += a_list[-1]
+        s += lastname
         authors_plus.append(s)
-        s = a_list[0][0] + ". " + a_list[-1]
+        s = a_list[0][0] + ". " + lastname
         authors_plus.append(s)
     return list(set(authors_plus))
 
@@ -154,7 +158,7 @@ def get_author_variation(authors):
 def highlight_authors(pdf):
     log.info("Checking authors.")
     matches = []
-    authors_plus = AUTHORS + get_author_variation(AUTHORS)
+    authors_plus = get_authors_strings(AUTHORS)
     for author in authors_plus:
         regex = re.compile(author, re.IGNORECASE | re.UNICODE)
         matches += highlight(pdf, regex, max_page=1)
