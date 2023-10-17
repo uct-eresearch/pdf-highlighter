@@ -1,0 +1,4 @@
+https://doi.org
+A&A.*DOI.*\ ([0-9]{4})\ Astrophysics$
+MNRAS.*\([0-9]*\)$
+The\ Astrophysical\ Journal.*https://doi.org
